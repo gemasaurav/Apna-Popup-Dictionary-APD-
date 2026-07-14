@@ -1,184 +1,156 @@
-const searchBtn = document.getElementById("searchBtn");const result =
-document.getElementById("popupContent");
-searchBtn.addEventListener("click", searchWord);
+const popupSearch =
+document.getElementById("popupSearch");
 
-document.getElementById("wordInput")
-.addEventListener("keypress", function(e){
-    if(e.key === "Enter"){
-        searchWord();
-    }
-});
+const popupResult =
+document.getElementById("popupResult");
+
+popupSearch.addEventListener(
+"click",
+searchWord
+);
 
 async function searchWord(){
 
-    let word =
-    document.getElementById("wordInput")
-    .value.trim();
+let word =
+document.getElementById("popupWord")
+.value
+.trim();
 
-    if(!word){
-        result.innerHTML =
-        "<h3>Please enter a word</h3>";
-        return;
-    }
+if(!word){
 
-    result.innerHTML =
-    "<h3>Searching...</h3>";
+popupResult.innerHTML =
+"<h3>Please enter a word</h3>";
 
-    try{
+return;
 
-        let response =
-        await fetch(
-        "https://api.dictionaryapi.dev/api/v2/entries/en/" + word
-        );
+}
 
-        let data =
-        await response.json();
+popupResult.innerHTML =
+"<h3>Searching...</h3>";
 
-        let entry = data[0];
+try{
 
-        let meaning =
-        entry.meanings.find(
-        m => m.partOfSpeech === "noun"
-        ) || entry.meanings[0];
+let response =
+await fetch(
+"https://api.dictionaryapi.dev/api/v2/entries/en/" + word
+);
 
-        let definition =
-        meaning.definitions[0];
+let data =
+await response.json();
 
-        let synonyms = [];
+let entry =
+data[0];
 
-        entry.meanings.forEach(m=>{
-            if(m.synonyms){
-                synonyms.push(...m.synonyms);
-            }
-        });
+let meaning =
+entry.meanings.find(
+m => m.partOfSpeech === "noun"
+) || entry.meanings[0];
 
-        synonyms =
-        [...new Set(synonyms)]
-        .slice(0,10);
+let definition =
+meaning.definitions[0];
 
-        let antonyms = [];
+let synonyms = [];
 
-        entry.meanings.forEach(m=>{
-            if(m.antonyms){
-                antonyms.push(...m.antonyms);
-            }
-        });
+entry.meanings.forEach(m=>{
 
-        antonyms =
-        [...new Set(antonyms)]
-        .slice(0,10);
+if(m.synonyms){
 
-        result.innerHTML =
+synonyms.push(...m.synonyms);
 
-        `
-        <h2>${entry.word}</h2>
+}
 
-        <p>
-        <b>English Meaning:</b><br>
-        ${definition.definition}
-        </p>
+});
 
-        <p>
-        <b>Type:</b><br>
-        ${meaning.partOfSpeech}
-        </p>
+synonyms =
+[...new Set(synonyms)]
+.slice(0,10);
 
-        <p>
-        <b>Pronunciation:</b><br>
-        ${entry.phonetic || "N/A"}
-        </p>
+let antonyms = [];
 
-        <p>
-        <b>Example:</b><br>
-        ${definition.example || "Not Available"}
-        </p>
+entry.meanings.forEach(m=>{
 
-        <p>
-        <b>Synonyms:</b><br>
-        ${synonyms.length ?
-        synonyms.join(", ")
-        : "None"}
-        </p>
+if(m.antonyms){
 
-        <p>
-        <b>Antonyms:</b><br>
-        ${antonyms.length ?
-        antonyms.join(", ")
-        : "None"}
-        </p>
+antonyms.push(...m.antonyms);
 
-        <button onclick="playAudio('${entry.phonetics[0]?.audio || ""}')">
-        🔊 Pronunciation
-        </button>
+}
 
-        <br><br>
+});
 
-        <button onclick="copyMeaning()">
-        📋 Copy Meaning
-        </button>
-        `;
+antonyms =
+[...new Set(antonyms)]
+.slice(0,10);
 
-    }
-    catch{
+popupResult.innerHTML =
 
-        result.innerHTML =
-        "<h3>Word Not Found</h3>";
+`
 
-    }
+<h2>${entry.word}</h2>
+
+<p>
+<b>Meaning:</b><br>
+${definition.definition}
+</p>
+
+<p>
+<b>Type:</b><br>
+${meaning.partOfSpeech}
+</p>
+
+<p>
+<b>Pronunciation:</b><br>
+${entry.phonetic || "N/A"}
+</p>
+
+<p>
+<b>Example:</b><br>
+${definition.example || "Not Available"}
+</p>
+
+<p>
+<b>Synonyms:</b><br>
+${synonyms.length ?
+synonyms.join(", ")
+: "None"}
+</p>
+
+<p>
+<b>Antonyms:</b><br>
+${antonyms.length ?
+antonyms.join(", ")
+: "None"}
+</p>
+
+<button onclick="playAudio('${entry.phonetics?.[0]?.audio || ""}')">
+
+🔊 Pronunciation
+
+</button>
+`;
+
+}
+catch{
+
+popupResult.innerHTML =
+"<h3>Word Not Found</h3>";
+
+}
+
 }
 
 function playAudio(audioUrl){
 
-    if(!audioUrl){
+if(!audioUrl){
 
-        alert("Audio not available");
-        return;
+alert("Audio not available");
 
-    }
-
-    let audio =
-    new Audio(audioUrl);
-
-    audio.play();
+return;
 
 }
 
-function copyMeaning(){
+let audio =
+new Audio(audioUrl);
 
-    navigator.clipboard.writeText(
-    result.innerText
-    );
-
-    alert("Copied");
-
-}
-const floatingBtn =
-document.getElementById("floatingBtn");
-
-const popupBox =
-document.getElementById("popupBox");
-
-const closePopup =
-document.getElementById("closePopup");
-
-floatingBtn.onclick=function(){
-
-popupBox.style.display="block";
-
-}
-
-closePopup.onclick=function(){
-
-popupBox.style.display="none";
-
-}
-
-popupBox.onclick=function(e){
-
-if(e.target===popupBox){
-
-popupBox.style.display="none";
-
-}
+audio.play();
 
 }
