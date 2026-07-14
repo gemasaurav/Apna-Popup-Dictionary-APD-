@@ -1,3 +1,4 @@
+alert("app.js loaded");
 const searchBtn =
 document.getElementById("searchBtn");
 
