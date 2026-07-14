@@ -1,3 +1,5 @@
+let selectedWord = "";
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const floatingBtn = document.getElementById("floatingBtn");
@@ -6,20 +8,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.addEventListener("selectionchange", function () {
 
-        let selectedText = window.getSelection().toString().trim();
+        let text = window.getSelection().toString().trim();
 
-        if (selectedText.length > 0) {
+        if (text.length > 0) {
 
-            alert("Selected: " + selectedText);
+            selectedWord = text;
 
-            floatingBtn.style.display = "block";
+            floatingBtn.style.display = "flex";
 
         } else {
 
             floatingBtn.style.display = "none";
 
         }
+    });
 
+    floatingBtn.addEventListener("click", function () {
+
+        if (!selectedWord) return;
+
+        document.getElementById("wordInput").value = selectedWord;
+
+        document.getElementById("searchBtn").click();
+
+        floatingBtn.style.display = "none";
     });
 
 });
