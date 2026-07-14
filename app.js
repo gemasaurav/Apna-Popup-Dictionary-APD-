@@ -1,96 +1,155 @@
-alert("app.js loaded");
-
 const searchBtn = document.getElementById("searchBtn");
 const result = document.getElementById("result");
 
-searchBtn.addEventListener("click", function () {
-    searchWord();
+searchBtn.addEventListener("click", searchWord);
+
+document.getElementById("wordInput")
+.addEventListener("keypress", function(e){
+    if(e.key === "Enter"){
+        searchWord();
+    }
 });
 
-async function searchWord() {
+async function searchWord(){
 
-    let word = document.getElementById("wordInput").value.trim();
+    let word =
+    document.getElementById("wordInput")
+    .value.trim();
 
-    if (!word) {
-        result.innerHTML = "<h3>Please enter a word</h3>";
+    if(!word){
+        result.innerHTML =
+        "<h3>Please enter a word</h3>";
         return;
     }
 
-    result.innerHTML = "<h3>Searching...</h3>";
+    result.innerHTML =
+    "<h3>Searching...</h3>";
 
-    try {
+    try{
 
-        let response = await fetch(
-            "https://api.dictionaryapi.dev/api/v2/entries/en/" + word
+        let response =
+        await fetch(
+        "https://api.dictionaryapi.dev/api/v2/entries/en/" + word
         );
 
-        let data = await response.json();
+        let data =
+        await response.json();
 
         let entry = data[0];
-        let meaning = entry.meanings[0];
-        let definition = meaning.definitions[0];
 
-        result.innerHTML = `
-            <h2>${entry.word}</h2>
+        let meaning =
+        entry.meanings.find(
+        m => m.partOfSpeech === "noun"
+        ) || entry.meanings[0];
 
-            <p><b>English Meaning:</b><br>
-            ${definition.definition}</p>
+        let definition =
+        meaning.definitions[0];
 
-            <p><b>Hindi Meaning:</b><br>
-            Coming Soon</p>
+        let synonyms = [];
 
-            <p><b>Type:</b><br>
-            ${meaning.partOfSpeech}</p>
+        entry.meanings.forEach(m=>{
+            if(m.synonyms){
+                synonyms.push(...m.synonyms);
+            }
+        });
 
-            <p><b>Pronunciation:</b><br>
-            ${entry.phonetic || "N/A"}</p>
+        synonyms =
+        [...new Set(synonyms)]
+        .slice(0,10);
 
-            <p><b>Example:</b><br>
-            ${definition.example || "Not Available"}</p>
+        let antonyms = [];
 
-            <p><b>Synonyms:</b><br>
-            ${(definition.synonyms || []).join(", ") || "None"}</p>
+        entry.meanings.forEach(m=>{
+            if(m.antonyms){
+                antonyms.push(...m.antonyms);
+            }
+        });
 
-            <p><b>Antonyms:</b><br>
-            ${(definition.antonyms || []).join(", ") || "None"}</p>
+        antonyms =
+        [...new Set(antonyms)]
+        .slice(0,10);
 
-            <button onclick="playAudio('${entry.phonetics?.[0]?.audio || ""}')">
-                🔊 Pronunciation
-            </button>
+        result.innerHTML =
+
+        `
+        <h2>${entry.word}</h2>
+
+        <p>
+        <b>English Meaning:</b><br>
+        ${definition.definition}
+        </p>
+
+        <p>
+        <b>Type:</b><br>
+        ${meaning.partOfSpeech}
+        </p>
+
+        <p>
+        <b>Pronunciation:</b><br>
+        ${entry.phonetic || "N/A"}
+        </p>
+
+        <p>
+        <b>Example:</b><br>
+        ${definition.example || "Not Available"}
+        </p>
+
+        <p>
+        <b>Synonyms:</b><br>
+        ${synonyms.length ?
+        synonyms.join(", ")
+        : "None"}
+        </p>
+
+        <p>
+        <b>Antonyms:</b><br>
+        ${antonyms.length ?
+        antonyms.join(", ")
+        : "None"}
+        </p>
+
+        <button onclick="playAudio('${entry.phonetics[0]?.audio || ""}')">
+        🔊 Pronunciation
+        </button>
+
+        <br><br>
+
+        <button onclick="copyMeaning()">
+        📋 Copy Meaning
+        </button>
         `;
 
-    } catch (error) {
+    }
+    catch{
 
-        result.innerHTML = "<h3>Word Not Found</h3>";
+        result.innerHTML =
+        "<h3>Word Not Found</h3>";
 
     }
 }
 
-function playAudio(audioUrl) {
-
-    if (!audioUrl) {
-        alert("Audio not available");
-        return;
-    }
-
-    let audio = new Audio(audioUrl);
-    audio.play();
-}
 function playAudio(audioUrl){
 
-```
-if(!audioUrl){
+    if(!audioUrl){
 
-    alert("Audio not available");
+        alert("Audio not available");
+        return;
 
-    return;
+    }
+
+    let audio =
+    new Audio(audioUrl);
+
+    audio.play();
 
 }
 
-let audio =
-new Audio(audioUrl);
+function copyMeaning(){
 
-audio.play();
-```
+    navigator.clipboard.writeText(
+    result.innerText
+    );
+
+    alert("Copied");
 
 }
