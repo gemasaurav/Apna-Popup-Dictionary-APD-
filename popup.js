@@ -1,3 +1,8 @@
+document.addEventListener("DOMContentLoaded", function(){
+
+document.getElementById("floatingBtn").style.display = "none";
+
+});
 let popupBtn = document.createElement("div");
 
 popupBtn.innerHTML = "📖";
