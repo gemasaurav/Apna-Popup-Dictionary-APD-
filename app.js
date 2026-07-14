@@ -153,3 +153,33 @@ function copyMeaning(){
     alert("Copied");
 
 }
+const floatingBtn =
+document.getElementById("floatingBtn");
+
+const popupBox =
+document.getElementById("popupBox");
+
+const closePopup =
+document.getElementById("closePopup");
+
+floatingBtn.onclick=function(){
+
+popupBox.style.display="block";
+
+}
+
+closePopup.onclick=function(){
+
+popupBox.style.display="none";
+
+}
+
+popupBox.onclick=function(e){
+
+if(e.target===popupBox){
+
+popupBox.style.display="none";
+
+}
+
+}
