@@ -4,53 +4,61 @@ document.getElementById("searchBtn");
 const result =
 document.getElementById("result");
 
-searchBtn.addEventListener(
-"click",
-function(){
+async function searchWord() {
 
-let word =
-document.getElementById(
-"wordInput"
-).value.toLowerCase();
+    let word = document.getElementById("wordInput").value.trim();
 
-if(dictionary[word]){
+    if (!word) return;
 
-let data =
-dictionary[word];
+    try {
 
-result.innerHTML =
+        let response = await fetch(
+            "https://api.dictionaryapi.dev/api/v2/entries/en/" + word
+        );
 
-`
-<h2>${word}</h2>
+        let data = await response.json();
 
-<p><b>Type:</b>
-${data.type}</p>
+        let entry = data[0];
 
-<p><b>English Meaning:</b>
-${data.english}</p>
+        let meaning = entry.meanings[0];
 
-<p><b>Hindi Meaning:</b>
-${data.hindi}</p>
+        let definition = meaning.definitions[0];
 
-<p><b>Synonyms:</b>
-${data.synonyms}</p>
+        document.getElementById("result").innerHTML = `
 
-<p><b>Antonyms:</b>
-${data.antonyms}</p>
+            <h2>${entry.word}</h2>
 
-<p><b>Example:</b>
-${data.example}</p>
+            <p><b>Pronunciation:</b> ${entry.phonetic || "N/A"}</p>
 
-`;
+            <p><b>English Meaning:</b>
+            ${definition.definition}</p>
+
+            <p><b>Type:</b>
+            ${meaning.partOfSpeech}</p>
+
+            <p><b>Hindi Meaning:</b>
+            (Coming in Step 2)</p>
+
+            <p><b>Example:</b>
+            ${definition.example || "Not Available"}</p>
+
+            <p><b>Synonyms:</b>
+            ${(definition.synonyms || []).join(", ") || "None"}</p>
+
+            <p><b>Antonyms:</b>
+            ${(definition.antonyms || []).join(", ") || "None"}</p>
+
+            <button onclick="playAudio('${entry.phonetics[0]?.audio}')">
+            🔊 Pronunciation
+            </button>
+
+        `;
+
+    } catch {
+
+        document.getElementById("result").innerHTML =
+        "<h3>Word Not Found</h3>";
+
+    }
 
 }
-
-else{
-
-result.innerHTML =
-
-"<h2>Word Not Found</h2>";
-
-}
-
-});
