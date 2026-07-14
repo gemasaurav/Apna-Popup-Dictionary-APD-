@@ -1,6 +1,5 @@
-const searchBtn = document.getElementById("searchBtn");
-const result = document.getElementById("result");
-
+const searchBtn = document.getElementById("searchBtn");const result =
+document.getElementById("popupContent");
 searchBtn.addEventListener("click", searchWord);
 
 document.getElementById("wordInput")
