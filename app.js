@@ -1,29 +1,13 @@
-const popupSearch =
-document.getElementById("popupSearch");
+async function searchWord(word){
+
+const popupWordTitle =
+document.getElementById("popupWordTitle");
 
 const popupResult =
 document.getElementById("popupResult");
 
-popupSearch.addEventListener(
-"click",
-searchWord
-);
-
-async function searchWord(){
-
-let word =
-document.getElementById("popupWord")
-.value
-.trim();
-
-if(!word){
-
-popupResult.innerHTML =
-"<h3>Please enter a word</h3>";
-
-return;
-
-}
+popupWordTitle.innerHTML =
+"<h2>" + word + "</h2>";
 
 popupResult.innerHTML =
 "<h3>Searching...</h3>";
@@ -32,7 +16,8 @@ try{
 
 let response =
 await fetch(
-"https://api.dictionaryapi.dev/api/v2/entries/en/" + word
+"https://api.dictionaryapi.dev/api/v2/entries/en/" +
+encodeURIComponent(word)
 );
 
 let data =
@@ -42,9 +27,7 @@ let entry =
 data[0];
 
 let meaning =
-entry.meanings.find(
-m => m.partOfSpeech === "noun"
-) || entry.meanings[0];
+entry.meanings[0];
 
 let definition =
 meaning.definitions[0];
@@ -85,41 +68,23 @@ popupResult.innerHTML =
 
 `
 
-<h2>${entry.word}</h2>
+<p><b>Meaning:</b><br>
+${definition.definition}</p>
 
-<p>
-<b>Meaning:</b><br>
-${definition.definition}
-</p>
+<p><b>Type:</b><br>
+${meaning.partOfSpeech}</p>
 
-<p>
-<b>Type:</b><br>
-${meaning.partOfSpeech}
-</p>
+<p><b>Pronunciation:</b><br>
+${entry.phonetic || "N/A"}</p>
 
-<p>
-<b>Pronunciation:</b><br>
-${entry.phonetic || "N/A"}
-</p>
+<p><b>Example:</b><br>
+${definition.example || "Not Available"}</p>
 
-<p>
-<b>Example:</b><br>
-${definition.example || "Not Available"}
-</p>
+<p><b>Synonyms:</b><br>
+${synonyms.length ? synonyms.join(", ") : "None"}</p>
 
-<p>
-<b>Synonyms:</b><br>
-${synonyms.length ?
-synonyms.join(", ")
-: "None"}
-</p>
-
-<p>
-<b>Antonyms:</b><br>
-${antonyms.length ?
-antonyms.join(", ")
-: "None"}
-</p>
+<p><b>Antonyms:</b><br>
+${antonyms.length ? antonyms.join(", ") : "None"}</p>
 
 <button onclick="playAudio('${entry.phonetics?.[0]?.audio || ""}')">
 
@@ -148,9 +113,7 @@ return;
 
 }
 
-let audio =
-new Audio(audioUrl);
-
-audio.play();
+new Audio(audioUrl).play();
 
 }
+
