@@ -72,15 +72,21 @@ text-align:left;
 
 }
 #floatingBtn{
-display:none !important;
+display:none;
 position:fixed;
-bottom:20px;
-right:20px;
-width:60px;
-height:60px;
+bottom:25px;
+right:25px;
+width:65px;
+height:65px;
 border-radius:50%;
 background:#f5a300;
-z-index:9999;
+color:white;
+font-size:32px;
+justify-content:center;
+align-items:center;
+box-shadow:0 0 15px rgba(0,0,0,0.4);
+cursor:pointer;
+z-index:99999;
 }
 
 #popupBox{
