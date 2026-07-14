@@ -62,3 +62,12 @@ async function searchWord() {
     }
 
 }
+function playAudio(audioUrl) {
+
+    if (!audioUrl) return;
+
+    let audio = new Audio(audioUrl);
+
+    audio.play();
+
+}
