@@ -1,61 +1,25 @@
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", function () {
 
-document.getElementById("floatingBtn").style.display = "none";
+    const floatingBtn = document.getElementById("floatingBtn");
 
-});
-let popupBtn = document.createElement("div");
+    floatingBtn.style.display = "none";
 
-popupBtn.innerHTML = "📖";
-popupBtn.style.position = "absolute";
-popupBtn.style.display = "none";
-popupBtn.style.width = "40px";
-popupBtn.style.height = "40px";
-popupBtn.style.background = "#ff9800";
-popupBtn.style.borderRadius = "50%";
-popupBtn.style.textAlign = "center";
-popupBtn.style.lineHeight = "40px";
-popupBtn.style.fontSize = "22px";
-popupBtn.style.cursor = "pointer";
-popupBtn.style.zIndex = "9999";
+    document.addEventListener("selectionchange", function () {
 
-document.body.appendChild(popupBtn);
+        let selectedText = window.getSelection().toString().trim();
 
-document.addEventListener("mouseup", function () {
+        if (selectedText.length > 0) {
 
-let selectedText = window.getSelection().toString().trim();
+            alert("Selected: " + selectedText);
 
-if(selectedText.length > 0){
+            floatingBtn.style.display = "block";
 
-let range = window.getSelection().getRangeAt(0);
+        } else {
 
-let rect = range.getBoundingClientRect();
+            floatingBtn.style.display = "none";
 
-popupBtn.style.left =
-(window.scrollX + rect.right + 10) + "px";
+        }
 
-popupBtn.style.top =
-(window.scrollY + rect.top) + "px";
-
-popupBtn.style.display = "block";
-
-popupBtn.dataset.word = selectedText;
-
-}else{
-
-popupBtn.style.display = "none";
-
-}
-
-});
-
-popupBtn.addEventListener("click", function(){
-
-let word = popupBtn.dataset.word;
-
-window.open(
-"https://gemasaurav.github.io/Apna-Popup-Dictionary-APD-/?word="
-+ encodeURIComponent(word),
-"_blank"
-);
+    });
 
 });
