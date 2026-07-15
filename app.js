@@ -89,7 +89,7 @@ popupResult.innerHTML =
 `
 
 <p><b>Meaning:</b><br>
-${definition.definition}</p>
+${definitionText}
 
 <p><b>Type:</b><br>
 ${meaning.partOfSpeech}</p>
