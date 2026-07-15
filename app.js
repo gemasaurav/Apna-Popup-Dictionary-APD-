@@ -1,19 +1,9 @@
-async function searchWord(word){
+async function fetchMeaning(word,targetId){
 
-const popupWordTitle =
-document.getElementById("popupWordTitle");
+const target =
+document.getElementById(targetId);
 
-const popupResult =
-document.getElementById("popupResult");
-
-if(!popupWordTitle || !popupResult){
-return;
-}
-
-popupWordTitle.innerHTML =
-"<h2>" + word + "</h2>";
-
-popupResult.innerHTML =
+target.innerHTML =
 "<h3>Searching...</h3>";
 
 try{
@@ -29,14 +19,15 @@ await response.json();
 
 if(!data || !data[0]){
 
-popupResult.innerHTML =
+target.innerHTML =
 "<h3>Word Not Found</h3>";
 
 return;
 
 }
 
-let entry = data[0];
+let entry =
+data[0];
 
 let meaning =
 entry.meanings?.[0];
@@ -57,26 +48,21 @@ entry.phonetic ||
 entry.phonetics?.[0]?.text ||
 "N/A";
 
-let audio =
-entry.phonetics?.find(
-p => p.audio
-)?.audio || "";
-
 let example =
 definition?.example ||
 "Not Available";
 
 let synonyms =
 definition?.synonyms?.length
-? definition.synonyms.slice(0,10).join(", ")
+? definition.synonyms.join(", ")
 : "None";
 
 let antonyms =
 definition?.antonyms?.length
-? definition.antonyms.slice(0,10).join(", ")
+? definition.antonyms.join(", ")
 : "None";
 
-popupResult.innerHTML =
+target.innerHTML =
 
 `
 
@@ -112,33 +98,54 @@ ${synonyms}
 ${antonyms}
 </p>
 
-${audio ? `
-<button onclick="playAudio('${audio}')">
-🔊 Pronunciation
-</button>
-` : ''}
-
 `;
 
 }
-catch(error){
+catch{
 
-popupResult.innerHTML =
+target.innerHTML =
 "<h3>Error loading meaning</h3>";
 
-console.log(error);
-
 }
 
 }
 
-function playAudio(audioUrl){
+document.addEventListener(
+"DOMContentLoaded",
+function(){
 
-if(!audioUrl){
-alert("Audio not available");
-return;
+const searchBtn =
+document.getElementById("searchBtn");
+
+if(searchBtn){
+
+searchBtn.addEventListener(
+"click",
+function(){
+
+let word =
+document.getElementById("wordInput")
+.value
+.trim();
+
+if(!word) return;
+
+fetchMeaning(
+word,
+"result"
+);
+
+});
+
 }
 
-new Audio(audioUrl).play();
+});
+
+function searchWord(word){
+
+fetchMeaning(
+word,
+"popupResult"
+);
 
 }
