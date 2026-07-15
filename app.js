@@ -98,13 +98,6 @@ ${synonyms}
 ${antonyms}
 </p>
 
-${audio ? `
-<button onclick="playAudio('${audio}')">
-🔊 Pronunciation
-</button>
-` : ''}
-
-`;
 
 }
 catch{
