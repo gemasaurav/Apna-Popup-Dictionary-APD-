@@ -92,7 +92,7 @@ popupResult.innerHTML =
 ${definitionText}
 
 <p><b>Type:</b><br>
-${meaning.partOfSpeech}</p>
+${partOfSpeech}</p>
 
 <p><b>Pronunciation:</b><br>
 ${entry.phonetic || "N/A"}</p>
