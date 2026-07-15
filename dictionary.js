@@ -1,51 +1,105 @@
-const dictionary = {
+async function searchWord(word = null, target = "result") {
 
-apple:{
+    const inputWord = word || document.getElementById("wordInput").value.trim();
 
-english:"A fruit.",
+    if (!inputWord) return;
 
-hindi:"सेब",
+    const output = document.getElementById(target);
 
-type:"Noun",
+    output.innerHTML = "Loading...";
 
-synonyms:"Fruit",
+    try {
 
-antonyms:"None",
+        const response = await fetch(
+            `https://api.dictionaryapi.dev/api/v2/entries/en/${inputWord}`
+        );
 
-example:"I eat an apple every day."
+        const data = await response.json();
 
-},
+        if (!Array.isArray(data)) {
+            output.innerHTML = "Word not found";
+            return;
+        }
 
-beautiful:{
+        const entry = data[0];
 
-english:"Pleasing in appearance.",
+        const wordText = entry.word || inputWord;
 
-hindi:"सुंदर",
+        const phonetic =
+            entry.phonetic ||
+            (entry.phonetics &&
+                entry.phonetics.find(p => p.text)?.text) ||
+            "Not Available";
 
-type:"Adjective",
+        let audio = "";
 
-synonyms:"Pretty, Lovely, Attractive",
+        if (entry.phonetics) {
+            const audioObj = entry.phonetics.find(
+                p => p.audio && p.audio.length > 0
+            );
+            if (audioObj) audio = audioObj.audio;
+        }
 
-antonyms:"Ugly",
+        const meaning =
+            entry.meanings?.[0]?.definitions?.[0]?.definition ||
+            "Not Available";
 
-example:"She is beautiful."
+        const example =
+            entry.meanings?.[0]?.definitions?.[0]?.example ||
+            "Not Available";
 
-},
+        const part =
+            entry.meanings?.[0]?.partOfSpeech ||
+            "Not Available";
 
-country:{
+        const synonyms =
+            entry.meanings?.[0]?.synonyms?.slice(0, 10).join(", ") ||
+            "None";
 
-english:"A nation with its own government.",
+        const antonyms =
+            entry.meanings?.[0]?.antonyms?.slice(0, 10).join(", ") ||
+            "None";
 
-hindi:"देश",
+        output.innerHTML = `
+        <h2>${wordText}</h2>
 
-type:"Noun",
+        <p><b>Meaning:</b><br>${meaning}</p>
 
-synonyms:"Nation, State",
+        <p><b>Type:</b><br>${part}</p>
 
-antonyms:"None",
+        <p><b>Pronunciation:</b><br>${phonetic}</p>
 
-example:"India is a country."
+        <p><b>Example:</b><br>${example}</p>
 
+        <p><b>Synonyms:</b><br>${synonyms}</p>
+
+        <p><b>Antonyms:</b><br>${antonyms}</p>
+
+        ${
+            audio
+                ? `<button onclick="new Audio('${audio}').play()">
+                     🔊 Pronunciation
+                   </button>`
+                : ""
+        }
+        `;
+    } catch (error) {
+
+        output.innerHTML = "Error loading meaning";
+
+        console.log(error);
+
+    }
 }
 
-};
+document.addEventListener("DOMContentLoaded", () => {
+
+    const btn = document.getElementById("searchBtn");
+
+    if (btn) {
+        btn.addEventListener("click", () => {
+            searchWord();
+        });
+    }
+
+});
