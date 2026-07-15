@@ -28,11 +28,29 @@ alert(JSON.stringify(data).substring(0,300));
 let entry =
 data[0];
 
-let meaning =
-entry.meanings[0];
+let definitionText = "Meaning not available";
+let partOfSpeech = "N/A";
 
-let definition =
-meaning.definitions[0];
+if(
+entry.meanings &&
+entry.meanings.length > 0
+){
+
+partOfSpeech =
+entry.meanings[0].partOfSpeech || "N/A";
+
+if(
+entry.meanings[0].definitions &&
+entry.meanings[0].definitions.length > 0
+){
+
+definitionText =
+entry.meanings[0].definitions[0].definition ||
+"Meaning not available";
+
+}
+
+}
 
 let synonyms = [];
 
