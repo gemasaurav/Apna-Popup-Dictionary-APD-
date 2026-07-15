@@ -98,7 +98,10 @@ ${partOfSpeech}</p>
 ${entry.phonetic || "N/A"}</p>
 
 <p><b>Example:</b><br>
-${definition.example || "Not Available"}</p>
+${
+entry.meanings?.[0]?.definitions?.[0]?.example
+|| "Not Available"
+}
 
 <p><b>Synonyms:</b><br>
 ${synonyms.length ? synonyms.join(", ") : "None"}</p>
