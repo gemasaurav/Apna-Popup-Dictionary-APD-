@@ -111,7 +111,7 @@ z-index:9998;
 
 #popupContent{
 
-background:black;
+background:white;
 
 width:90%;
 
@@ -133,4 +133,33 @@ cursor:pointer;
 
 font-size:25px;
 
+}
+/* Popup text color fix */
+
+#popupContent{
+    color:#000 !important;
+}
+
+#popupContent h2{
+    color:#000 !important;
+}
+
+#popupContent h3{
+    color:#000 !important;
+}
+
+#popupContent p{
+    color:#000 !important;
+}
+
+#popupResult{
+    color:#000 !important;
+}
+
+#popupResult *{
+    color:#000 !important;
+}
+
+#popupWord{
+    color:#000 !important;
 }
