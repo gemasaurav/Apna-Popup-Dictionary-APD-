@@ -74,19 +74,24 @@ text-align:left;
 #floatingBtn{
 display:none;
 position:fixed;
-bottom:25px;
-right:25px;
-width:65px;
-height:65px;
+
+right:15px;
+top:50%;
+
+transform:translateY(-50%);
+
+width:60px;
+height:60px;
+
 border-radius:50%;
 background:#f5a300;
-color:white;
-font-size:32px;
-justify-content:center;
-align-items:center;
-box-shadow:0 0 15px rgba(0,0,0,0.4);
+
+box-shadow:0 4px 10px rgba(0,0,0,0.3);
+
+z-index:9999;
+
 cursor:pointer;
-z-index:99999;
+
 }
 
 #popupBox{
