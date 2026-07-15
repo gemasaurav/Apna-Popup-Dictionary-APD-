@@ -22,9 +22,7 @@ encodeURIComponent(word)
 
 let data =
 await response.json();
-console.log(data);
 
-alert(JSON.stringify(data).substring(0,300));
 let entry =
 data[0];
 
