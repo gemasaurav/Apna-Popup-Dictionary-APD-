@@ -38,13 +38,43 @@ return;
 
 let entry = data[0];
 
+let meaning =
+entry.meanings?.[0];
+
+let definition =
+meaning?.definitions?.[0];
+
 let meaningText =
-entry.meanings?.[0]?.definitions?.[0]?.definition
-|| "Meaning not available";
+definition?.definition ||
+"Meaning not available";
 
 let partOfSpeech =
-entry.meanings?.[0]?.partOfSpeech
-|| "N/A";
+meaning?.partOfSpeech ||
+"N/A";
+
+let phonetic =
+entry.phonetic ||
+entry.phonetics?.[0]?.text ||
+"N/A";
+
+let audio =
+entry.phonetics?.find(
+p => p.audio
+)?.audio || "";
+
+let example =
+definition?.example ||
+"Not Available";
+
+let synonyms =
+definition?.synonyms?.length
+? definition.synonyms.slice(0,10).join(", ")
+: "None";
+
+let antonyms =
+definition?.antonyms?.length
+? definition.antonyms.slice(0,10).join(", ")
+: "None";
 
 popupResult.innerHTML =
 
@@ -61,6 +91,31 @@ ${meaningText}
 <b>Type:</b><br>
 ${partOfSpeech}
 </p>
+
+<p>
+<b>Pronunciation:</b><br>
+${phonetic}
+</p>
+
+<p>
+<b>Example:</b><br>
+${example}
+</p>
+
+<p>
+<b>Synonyms:</b><br>
+${synonyms}
+</p>
+
+<p>
+<b>Antonyms:</b><br>
+${antonyms}
+</p>
+
+<button onclick="playAudio('${audio}')">
+🔊 Pronunciation
+</button>
+
 `;
 
 }
