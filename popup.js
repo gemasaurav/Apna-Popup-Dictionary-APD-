@@ -44,7 +44,7 @@ floatingBtn.style.display =
 floatingBtn.addEventListener(
 "click",
 function(){
-
+searchWord(selectedWord);
 if(!selectedWord) return;
 
 popupBox.style.display =
