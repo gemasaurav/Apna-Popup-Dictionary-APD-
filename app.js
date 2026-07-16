@@ -141,7 +141,9 @@ word,
 });
 
 function searchWord(word){
-
+if(!word){
+word = popupWord.value.trim();
+}
 fetchMeaning(
 word,
 "popupResult"
