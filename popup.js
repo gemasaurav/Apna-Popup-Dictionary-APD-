@@ -49,7 +49,8 @@ if(!selectedWord) return;
 
 popupBox.style.display =
 "block";
-
+document.getElementById("popupResult").innerHTML =
+document.getElementById("result").innerHTML;
 searchWord(selectedWord);
 
 floatingBtn.style.display =
